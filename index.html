@@ -3,34 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عداد زوار نادي وادي موسى</title>
+    <title>نادي وادي موسى - وادي موسى كلوب</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding: 30px; width: 90%; max-width: 400px; text-align: center; }
-        .count { font-size: 70px; font-weight: 700; color: #2c3e50; margin: 10px 0; }
-        .label { font-size: 18px; color: #7f8c8d; }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Poppins:wght@400;700&display=swap');
+        body { font-family: 'Tajawal', 'Poppins', sans-serif; background-color: #f8f9fa; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 40px; width: 85%; max-width: 450px; text-align: center; border-top: 8px solid #1a73e8; }
+        .section { margin-bottom: 30px; }
+        .count-val { font-size: 60px; font-weight: 700; color: #1a73e8; display: block; margin: 5px 0; }
+        .label-ar { font-size: 20px; color: #2c3e50; font-weight: 700; }
+        .label-en { font-size: 16px; color: #7f8c8d; font-weight: 400; display: block; margin-top: 4px; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
+        .footer { font-size: 14px; color: #bdc3c7; margin-top: 10px; }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <div class="label">عدد المتواجدين الآن</div>
-        <div id="visitor-count" class="count">...</div>
-        <div class="label">نادي وادي موسى</div>
+        <!-- القسم الأول: عدد المتواجدين -->
+        <div class="section">
+            <span class="label-ar">عدد المتواجدين الآن</span>
+            <span class="label-en">Current Visitors</span>
+            <span id="current-count" class="count-val">...</span>
+        </div>
+
+        <hr>
+
+        <!-- القسم الثاني: الأماكن المتاحة -->
+        <div class="section">
+            <span class="label-ar">الأماكن المتاحة</span>
+            <span class="label-en">Available Spots</span>
+            <span id="available-count" class="count-val" style="color: #34a853;">...</span>
+        </div>
+
+        <div class="footer">Wadi Musa Club - نادي وادي موسى</div>
     </div>
 
     <script>
-        // الربط مع قاعدة البيانات لتقرأ الرقم تلقائياً
+        // إعدادات الربط
         const firebaseConfig = { databaseURL: "https://wadi-musa-club-gardens-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database().ref('capacity');
+        const MAX_CAPACITY = 200; // السعة الكلية
 
-        // تحديث الرقم فوراً عند تغيره من عند الموظف
+        // التحديث التلقائي
         db.on('value', (snapshot) => {
-            const currentCount = snapshot.val() || 0;
-            document.getElementById('visitor-count').innerText = currentCount;
+            const current = snapshot.val() || 0;
+            const available = MAX_CAPACITY - current;
+
+            document.getElementById('current-count').innerText = current;
+            document.getElementById('available-count').innerText = (available < 0) ? 0 : available;
         });
     </script>
 </body>
