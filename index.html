@@ -4,96 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>عداد زوار نادي وادي موسى</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
-        
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .card {
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .logo-text {
-            color: #2c3e50;
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        .sub-text {
-            color: #7f8c8d;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-        .box {
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-        .box-current {
-            background-color: #e3f2fd;
-            border: 2px solid #2196f3;
-        }
-        .box-remaining {
-            background-color: #e8f5e9;
-            border: 2px solid #4caf50;
-        }
-        .box-title {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .number {
-            font-size: 48px;
-            font-weight: 700;
-        }
-        .current-number { color: #1976d2; }
-        .remaining-number { color: #388e3c; }
-        .capacity-info {
-            margin-top: 20px;
-            color: #95a5a6;
-            font-size: 14px;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
+        body { font-family: 'Tajawal', sans-serif; background-color: #f4f7f6; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding: 30px; width: 90%; max-width: 400px; text-align: center; }
+        .count { font-size: 70px; font-weight: 700; color: #2c3e50; margin: 10px 0; }
+        .label { font-size: 18px; color: #7f8c8d; }
     </style>
 </head>
 <body>
-
     <div class="card">
-        <div class="logo-text">نادي وادي موسى</div>
-        <div class="sub-text">الثقافي الرياضي الاجتماعي - مدينة الألعاب</div>
-
-        <!-- عدد المتواجدين حالياً -->
-        <div class="box box-current">
-            <div class="box-title">الأشخاص المتواجدون حالياً</div>
-            <!-- يمكنك تغيير الرقم 120 برمجياً لاحقاً -->
-            <div class="number current-number" id="currentCount">120</div> 
-        </div>
-
-        <!-- الأماكن المتاحة -->
-        <div class="box box-remaining">
-            <div class="box-title">الأماكن المتاحة للدخول</div>
-            <!-- الرقم 80 هو ناتج 200 - 120 -->
-            <div class="number remaining-number" id="remainingCount">80</div>
-        </div>
-
-        <div class="capacity-info">
-            الطاقة الاستيعابية القصوى: <strong>200</strong> شخص
-        </div>
+        <div class="label">عدد المتواجدين الآن</div>
+        <div id="visitor-count" class="count">...</div>
+        <div class="label">نادي وادي موسى</div>
     </div>
 
+    <script>
+        // الربط مع قاعدة البيانات لتقرأ الرقم تلقائياً
+        const firebaseConfig = { databaseURL: "https://wadi-musa-club-gardens-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database().ref('capacity');
+
+        // تحديث الرقم فوراً عند تغيره من عند الموظف
+        db.on('value', (snapshot) => {
+            const currentCount = snapshot.val() || 0;
+            document.getElementById('visitor-count').innerText = currentCount;
+        });
+    </script>
 </body>
 </html>
