@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نادي وادي موسى - وادي موسى كلوب</title>
+    <title>نادي وادي موسى - Wadi Musa Club</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
@@ -12,7 +12,7 @@
         .card { background: white; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); padding: 40px; width: 85%; max-width: 450px; text-align: center; border-top: 8px solid #1a73e8; }
         .section { margin-bottom: 30px; }
         .count-val { font-size: 60px; font-weight: 700; color: #1a73e8; display: block; margin: 5px 0; }
-        .label-ar { font-size: 20px; color: #2c3e50; font-weight: 700; }
+        .label-ar { font-size: 20px; color: #2c3e50; font-weight: 700; display: block; }
         .label-en { font-size: 16px; color: #7f8c8d; font-weight: 400; display: block; margin-top: 4px; }
         hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
         .footer { font-size: 14px; color: #bdc3c7; margin-top: 10px; }
@@ -21,19 +21,19 @@
 <body>
 
     <div class="card">
-        <!-- القسم الأول: عدد المتواجدين -->
+        <!-- القسم الأول: عدد الزوار المتواجدين -->
         <div class="section">
-            <span class="label-ar">عدد المتواجدين الآن</span>
-            <span class="label-en">Current Visitors</span>
+            <span class="label-ar">عدد الزوار المتواجدين</span>
+            <span class="label-en">Number of Visitors Present</span>
             <span id="current-count" class="count-val">...</span>
         </div>
 
         <hr>
 
-        <!-- القسم الثاني: الأماكن المتاحة -->
+        <!-- القسم الثاني: عدد الزوار المتاحين -->
         <div class="section">
-            <span class="label-ar">الأماكن المتاحة</span>
-            <span class="label-en">Available Spots</span>
+            <span class="label-ar">عدد الزوار المتاحين</span>
+            <span class="label-en">Number of Visitors Available</span>
             <span id="available-count" class="count-val" style="color: #34a853;">...</span>
         </div>
 
@@ -41,13 +41,13 @@
     </div>
 
     <script>
-        // إعدادات الربط
         const firebaseConfig = { databaseURL: "https://wadi-musa-club-gardens-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database().ref('capacity');
-        const MAX_CAPACITY = 200; // السعة الكلية
+        
+        // تم التعديل للسعة 200
+        const MAX_CAPACITY = 200; 
 
-        // التحديث التلقائي
         db.on('value', (snapshot) => {
             const current = snapshot.val() || 0;
             const available = MAX_CAPACITY - current;
